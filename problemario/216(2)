@@ -1,0 +1,37 @@
+<?php
+$contador=0;
+$arregloMUL=array();
+fscanf(STDIN, "%s", $s);
+fscanf(STDIN, "%s", $u);
+fscanf(STDIN, "%s", $p);
+fscanf(STDIN, "%s", $bd);
+//$cone=mysqli_connect("localhost","root","","servicios");
+$cone=mysqli_connect($s,$u,$p,$bd);
+
+try{
+    //$DBcon = new PDO("mysql:host=localhost;dbname=domino",'root','');
+    $DBcon = new PDO("mysql:host=$s;dbname=$bd",$u,$p);
+    $DBcon->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+   }catch(PDOException $ex){
+    
+    die($ex->getMessage());
+   }
+
+   $query ="show create table  facturas";
+   $query ="SELECT id, secuencia from `juegos`";
+   $stmt = $DBcon->prepare($query);
+    $stmt->execute(); 
+    $partidasData = array();
+
+while($row=$stmt->fetch(PDO::FETCH_ASSOC)){
+  
+      $partidasData['Partidas'][] = $row;
+ 
+}
+$expected = array_filter($partidasData, function ($var) use ($ID) {
+    return ($var['ID'] == $ID);
+}); 
+echo "$userData";
+
+?>

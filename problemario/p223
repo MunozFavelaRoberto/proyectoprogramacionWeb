@@ -1,0 +1,28 @@
+<?php
+$ubicacion = trim(fgets(STDIN));
+  $user = trim(fgets(STDIN));
+  $password = trim(fgets(STDIN));
+  $dataBase = trim(fgets(STDIN));
+  $conn = mysqli_connect($ubicacion,$user,$password,$dataBase);
+if ($conn) {
+	mysqli_select_db($conn, 'BD_Servicios');
+	$query1 = "SELECT COUNT(*) AS qty, U.Nombre, U.Apellidos, F.id_Cliente
+				FROM BD_PagoServ_Facturas F JOIN Usuarios U ON F.id_Cliente = U.Usuario
+				WHERE fecha_Pago < fecha_Vencimiento
+				AND fecha_Pago IS NOT NULL
+				GROUP BY id_Cliente
+				ORDER BY U.Apellidos ASC";
+	$data = mysqli_fetch_all(mysqli_query($conn, $query1), MYSQLI_ASSOC);
+
+	mysqli_select_db($conn, 'BD_Domino');
+	foreach ($data as $user) {
+		$query2 = "SELECT COUNT(*) AS total
+					FROM Usuarios U JOIN BD_Domino_Juegos BDJ ON U.Usuario = BDJ.id_invitado
+					WHERE U.Nombre = '" . $user['Nombre'] . "'
+					AND U.Apellidos = '" . $user['Apellidos'] . "'";
+		$count = mysqli_fetch_assoc(mysqli_query($conn, $query2));
+		$result = $user['Nombre'] . " " . $user['Apellidos'] . "BD_Servicios[" . $user['qty'] . "]:BD_Domino[" . $count['total'] ."]";
+		fwrite(STDOUT, $result . PHP_EOL);
+	}
+}
+?>

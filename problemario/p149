@@ -1,0 +1,94 @@
+<?php
+$casos=trim(fgets(STDIN));
+$cont=0;
+while ($cont !=$casos){
+    if(true){
+    $cont++;
+    $caso[$cont]=trim(fgets(STDIN));
+    q0($caso[$cont]);
+    echo "\n";
+}
+}
+
+function q1($parte,$parametro=" "){
+    if(true){
+    $arregloNumero=explode($parametro, $parte);
+    $newCadena="";
+    $result=0;
+    foreach ($arregloNumero as $key => $value) {
+        $newCadena.=$value;
+    }
+    $newCadena=str_split($newCadena);
+    // for ($indice=0; $indice <(count($newCadena)-1) ; $indice++) {
+    //     if (($indice+1)%2===0) {
+    //         $result+=$newCadena[$indice]*(3);
+    //     }else  $result+=$newCadena[$indice]*(1);
+        
+    // }
+    $indice=0;
+while($indice <(count($newCadena)-1)){
+    if (($indice+1)%2===0) {
+        $result+=$newCadena[$indice]*(3);
+    }else  $result+=$newCadena[$indice]*(1);
+    $indice++;
+}
+
+    if (10-($result%10)==$newCadena[count($newCadena)-1]) {
+        echo "CORRECTO";
+    }else
+    echo "INCORRECTO";
+}
+}
+function q0($parte){
+    $verifica=true;
+    $cont_Guion=0;
+    $cont_Espacio=0;
+    $permitidos = "0123456789- ";
+    // for ($i=0; $i<strlen($parte); $i++){
+    //     if (strpos($permitidos, substr($parte,$i,1))===false){
+    //     echo "INCORRECTO";
+    //     $verifica=false;
+    //     }
+    //     if (substr($parte,$i,1)=="-") $cont_Guion++;
+    //     if (substr($parte,$i,1)==" ") $cont_Espacio++;;
+    // }
+    $i=0;
+while($i<strlen($parte)){
+    if (strpos($permitidos, substr($parte,$i,1))===false){
+        echo "INCORRECTO";
+        $verifica=false;
+        }
+        // if (substr($parte,$i,1)=="-") $cont_Guion++;
+        // if (substr($parte,$i,1)==" ") $cont_Espacio++;
+
+        switch(substr($parte,$i,1)){
+            case "-":
+                $cont_Guion++;
+                break;
+                case " ":
+                    $cont_Espacio++;
+                    break;
+        }
+    $i++;
+}
+
+if(true){
+    if (($cont_Espacio===0 and $cont_Guion===0)) {
+        if ($verifica===true) {
+            q1($parte," ");
+        }  
+    }else if ($cont_Espacio===4 and $cont_Guion===0) {
+        if ($verifica===true) {
+            q1($parte," ");
+        }   
+    }else if ($cont_Guion===4 and $cont_Espacio===0) {
+        if ($verifica===true) {
+            q1($parte,"-");
+        }   
+    }
+    else{
+        echo "INCORRECTO";
+    }
+}
+}
+?>

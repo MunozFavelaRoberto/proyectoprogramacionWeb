@@ -1,0 +1,78 @@
+<?php
+    $ubicacion = trim(fgets(STDIN));
+    $usuario = trim(fgets(STDIN));
+    $password = trim(fgets(STDIN));
+    $dataBase = trim(fgets(STDIN));
+
+    $connection = mysqli_connect($ubicacion,$usuario,$password,$dataBase);
+
+$query1 = "SELECT DATE_FORMAT(Fecha,'%d/%b/%Y') as Fecha, concat('$',FORMAT(Apuesta,2)) as Apuesta FROM BD_Apuesta WHERE Apuesta = (SELECT MAX(Apuesta) FROM BD_Apuesta)";
+$query2 = "";
+$query3 = "SELECT CONCAT(r.Nombre,' ',r.Apellidos) as Retador, CONCAT(i.Nombre,' ',i.Apellidos) as Invitado, CONCAT(g.Nombre,' ',g.Apellidos) as Ganador FROM BD_Apuesta b JOIN Usuarios r ON b.Retador = r.Usuario JOIN Usuarios i ON b.Invitado = i.Usuario JOIN Usuarios g ON b.Invitado = g.Usuario WHERE Apuesta = (SELECT MAX(Apuesta ) FROM BD_Apuesta)";
+$query4 = "SELECT concat('$',FORMAT(SUM(Apuesta*.10),2)) as Apuesta FROM BD_Apuesta";
+$query5 = "SELECT concat('$',FORMAT(SUM(Apuesta),0)) as Ganancia FROM BD_Apuesta where weekday(Fecha)=6 or weekday(Fecha)=5;";
+$query6 = "SELECT Cuentas_Bancarias.Id as Id, Banco, CONCAT(Nombre,' ',Apellidos) as Nombre, CHAR_LENGTH(CLABE) as CLABE FROM Cuentas_Bancarias join Usuarios u on u.Usuario = Cuentas_Bancarias.IdUser join Bancos b on b.Id = Cuentas_Bancarias.IdBanco where CHAR_LENGTH(CLABE)!=18 and CHAR_LENGTH(CLABE)!=16";
+$query7 = "";
+
+    $consulta = mysqli_query($connection,$query1);
+    if(mysqli_num_rows($consulta) > 0)
+    {
+        while($fila = mysqli_fetch_assoc($consulta))
+        {
+            echo $fila['Fecha']." ".$fila['Apuesta']."\n";
+        }
+    }else
+    {
+        echo "\n";
+    }
+
+    $consulta = mysqli_query($connection,$query3);
+    if(mysqli_num_rows($consulta) > 0)
+    {
+        while($fila = mysqli_fetch_assoc($consulta))
+        {
+            echo $fila['Retador']." vs ".$fila['Invitado']." ".' gano '." ".$fila['Ganador']."."."\n";
+            echo "\n";
+        }
+    }else
+    {
+        echo "\n";
+    }
+
+    $consulta = mysqli_query($connection,$query4);
+    if(mysqli_num_rows($consulta) > 0)
+    {
+        while($fila = mysqli_fetch_assoc($consulta))
+        {
+            echo $fila['Apuesta']."\n";
+        }
+    }else
+    {
+        echo "\n";
+    }
+
+    $consulta = mysqli_query($connection,$query5);
+    if(mysqli_num_rows($consulta) > 0)
+    {
+        while($fila = mysqli_fetch_assoc($consulta))
+        {
+            echo $fila['Ganancia']."\n";
+        }
+    }else
+    {
+        echo "\n";
+    }
+
+    $consulta = mysqli_query($connection,$query6);
+    if(mysqli_num_rows($consulta) > 0)
+    {
+        while($fila = mysqli_fetch_assoc($consulta))
+        {
+            echo $fila['Id']." ".$fila['Banco']." ".$fila['Nombre']." ".$fila['CLABE']." : ";
+        }
+        echo "\n";
+    }else
+    {
+        echo "\n";
+    }
+?>
